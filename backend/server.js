@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import User from "./models/User.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const PORT = process.env.PORT;
 const API_PATH = process.env.BASE_PATH;
@@ -96,7 +97,17 @@ app.post(API_URL + '/auth/login', async (req, res) => {
         if (!passwordMatches) {
             return res.status(200).send({ status: 200, message: "Invalid credentials." });
         }
-        return res.status(200).send({ status: 200, message: "Successfully logged-in." });
+
+        /**
+         * Create JWT
+         */
+        const token = jwt.sign(
+            { id: user._id, username: user.username }, // Payload (data inside token)
+            process.env.JWT_SECRET,                    // Secret key
+            { expiresIn: '1h' }                        // Token expires in 1 hour
+        );
+
+        return res.status(200).send({ token, user: { id: user._id, username: user.username }, status: 200, message: "Successfully logged-in." });
 
     } catch (error) {
         if (DEBUG) {

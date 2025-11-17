@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/iamhimansu/blog#readme",
   "dependencies": {
+    "@tanstack/react-query": "^5.90.10",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "express": "^5.1.0",

@@ -1,3 +1,4 @@
-/node_modules
+/backend/node_modules
 /backend/.env
-/fronent/.env
+/frontend/.env
+/frontend/node_modules
