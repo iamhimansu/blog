@@ -8,6 +8,8 @@ const PORT = process.env.PORT;
 const API_PATH = process.env.BASE_PATH;
 const API_VERSION = process.env.API_VERSION;
 const API_URL = API_PATH + '/' + API_VERSION;
+const DEBUG = process.env.DEBUG;
+
 let connection = null;
 
 const app = express();
@@ -21,9 +23,9 @@ app.get(API_URL + '/welcome', (req, res) => {
     res.status(200).send({ message: 'Hello, Welcome' });
 });
 
-app.post(API_URL + '/registration', async (req, res) => {
+app.post(API_URL + '/auth/registration', async (req, res) => {
 
-    const { username, email, password } = req.body;
+    const { username = undefined, email = undefined, password = undefined } = req.body;
     /**
      * Check if the user is already present
      */
@@ -35,11 +37,11 @@ app.post(API_URL + '/registration', async (req, res) => {
     });
 
     if (alreadyExists) {
-        res.status(200).send({ "status": 200, "message": "User with username or email already exists." });
+        return res.status(200).send({ "status": 200, "message": "User with username or email already exists." });
     }
 
     if (!password) {
-        res.status(200).send({ "status": 200, "message": "Please provide a password." });
+        return res.status(200).send({ "status": 200, "message": "Please provide a password." });
     }
 
     /**
@@ -58,9 +60,49 @@ app.post(API_URL + '/registration', async (req, res) => {
 
     try {
         await newUser.save();
-        res.status(200).send({ status: 200, "message": "User registration successful!" });
+        return res.status(200).send({ status: 200, "message": "User registration successful!" });
     } catch (error) {
-        res.status(500).send({ status: error.status, "message": "Something went wrong, please try again!" });
+        return res.status(500).send({ status: error.status, "message": "Something went wrong, please try again!" });
+    }
+
+});
+
+app.post(API_URL + '/auth/login', async (req, res) => {
+
+    try {
+        const { username, email, password } = req.body;
+
+        if (!password) {
+            return res.status(200).send({ status: 200, message: "Invalid credentials." });
+        }
+
+        /**
+         * Check if the user is found in the system
+         */
+        const user = await User.findOne({ $or: [{ username: username }, { email: email }] });
+
+        if (!user) {
+            return res.status(200).send({ status: 200, message: "Invalid credentials." });
+        }
+
+        /**
+         * Compare user password, given === saved
+         */
+
+        console.log(user, user.password, password);
+
+        const passwordMatches = await bcrypt.compare(password, user.password);
+
+        if (!passwordMatches) {
+            return res.status(200).send({ status: 200, message: "Invalid credentials." });
+        }
+        return res.status(200).send({ status: 200, message: "Successfully logged-in." });
+
+    } catch (error) {
+        if (DEBUG) {
+            throw error;
+        }
+        return res.status(500).send({ status: 500, message: "Something went wrong, please try again!" });
     }
 
 });
