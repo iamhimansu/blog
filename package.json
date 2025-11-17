@@ -19,8 +19,11 @@
   },
   "homepage": "https://github.com/iamhimansu/blog#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "expres": "^0.0.5",
     "express": "^5.1.0",
-    "expresss": "^0.0.0"
+    "expresss": "^0.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.20.0"
   }
 }
