@@ -2,6 +2,7 @@ import run from "./db.js";
 import express from "express";
 import cors from "cors";
 import User from "./models/User.js";
+import bcrypt from "bcryptjs";
 
 const PORT = process.env.PORT;
 const API_PATH = process.env.BASE_PATH;
@@ -37,11 +38,31 @@ app.post(API_URL + '/registration', async (req, res) => {
         res.status(200).send({ "status": 200, "message": "User with username or email already exists." });
     }
 
-    /**
-     * 
-     */
+    if (!password) {
+        res.status(200).send({ "status": 200, "message": "Please provide a password." });
+    }
 
-    res.status(200).send({ "userexists": alreadyExists });
+    /**
+     * Create user and save
+     * Hash the password (Encrypt it)
+     */
+    const salt = await bcrypt.genSalt(10);
+
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({
+        username: username,
+        email: email,
+        password: hashedPassword
+    });
+
+    try {
+        await newUser.save();
+        res.status(200).send({ status: 200, "message": "User registration successful!" });
+    } catch (error) {
+        res.status(500).send({ status: error.status, "message": "Something went wrong, please try again!" });
+    }
+
 });
 
 // app.use(() => {
