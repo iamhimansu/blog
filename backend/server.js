@@ -7,6 +7,7 @@ const PORT = process.env.PORT;
 const API_PATH = process.env.BASE_PATH;
 const API_VERSION = process.env.API_VERSION;
 const API_URL = API_PATH + '/' + API_VERSION;
+let connection = null;
 
 const app = express();
 
@@ -19,21 +20,36 @@ app.get(API_URL + '/welcome', (req, res) => {
     res.status(200).send({ message: 'Hello, Welcome' });
 });
 
-app.post(API_URL + '/registration', (req, res) => {
-    console.log(req.body);
+app.post(API_URL + '/registration', async (req, res) => {
 
-    // const { username, email, password } = req.body;
-    // /**
-    //  * Check if the user is already present
-    //  */
-    // const alreadyExists = User.find({ username: { $exists: true, $eq: username } });
-    // console.log(alreadyExists);
+    const { username, email, password } = req.body;
+    /**
+     * Check if the user is already present
+     */
+    const alreadyExists = await User.findOne({
+        $or: [
+            { username: { $exists: true, $eq: username } },
+            { email: { $exists: true, $eq: email } }
+        ]
+    });
 
-    res.status(200).send({ userexists: 0 })
+    if (alreadyExists) {
+        res.status(200).send({ "status": 200, "message": "User with username or email already exists." });
+    }
+
+    /**
+     * 
+     */
+
+    res.status(200).send({ "userexists": alreadyExists });
 });
 
+// app.use(() => {
+//     connection.disconnect();
+//     console.log('Disconnected!');
+// });
 
-app.listen(PORT, () => {
-    run().catch(console.dir);
+app.listen(PORT, async () => {
+    connection = await run();
     console.log(`Server started, visit: http://localhost:${PORT}/welcome`);
 });
