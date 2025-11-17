@@ -1,0 +1,26 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "Blog App: React, Node, TypeScript, MogoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamhimansu/blog.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/iamhimansu/blog/issues"
+  },
+  "homepage": "https://github.com/iamhimansu/blog#readme",
+  "dependencies": {
+    "expres": "^0.0.5",
+    "express": "^5.1.0",
+    "expresss": "^0.0.0"
+  }
+}
