@@ -1,11 +1,16 @@
+import { Box, Typography } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
 const HomePage: React.FC = () => {
     return (
         <>
-            <h1>Welcome to the Blog! <Link to={{
-                pathname: "/login",
-            }}>Click to login</Link></h1>;
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <div>
+                    <Typography variant="h3" gutterBottom>
+                        Blogflirt
+                    </Typography>
+                    <Typography>Stay in the loop with the latest about our products</Typography>
+                </div>
+            </Box>
         </>
     );
 }
