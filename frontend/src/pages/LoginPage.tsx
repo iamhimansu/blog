@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 
 function LoginPage() {
-    const [email, setEmail] = useState('');
+    const [userOremail, setUserOremail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
@@ -23,17 +23,16 @@ function LoginPage() {
     // ---------------------------
 
     interface LoginInput {
-        email: string;
+        userOremail: string;
         password: string;
     }
     // API Mutation
     const loginMutation = useMutation<LoginResponse, Error, LoginInput>({
         mutationFn: async (userData) => {
-            const response = await api.post('/auth/login', userData);
+            const response = await api.post('/auth/login', { username: userData.userOremail, password: userData.password });
             return response.data;
         },
         onSuccess: (data) => {
-            console.log(data);
 
             if (data.status === 200) {
                 // Save the Token
@@ -50,7 +49,7 @@ function LoginPage() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        loginMutation.mutate({ email, password });
+        loginMutation.mutate({ userOremail, password });
     };
 
     return (
@@ -66,8 +65,8 @@ function LoginPage() {
 
                 <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                     <TextField
-                        margin="normal" required fullWidth label="Email Address"
-                        value={email} onChange={(e) => setEmail(e.target.value)}
+                        margin="normal" required fullWidth label="Username or Email"
+                        value={userOremail} onChange={(e) => setUserOremail(e.target.value)}
                     />
                     <TextField
                         margin="normal" required fullWidth label="Password" type="password"

@@ -80,7 +80,9 @@ app.post(API_URL + '/auth/login', async (req, res) => {
         /**
          * Check if the user is found in the system
          */
-        const user = await User.findOne({ $or: [{ username: username }, { email: email }] }).lean();
+        console.log(username, email);
+
+        const user = await User.findOne({ $or: [{ username: username }, { email: username }] }).lean();
 
         if (!user) {
             return res.status(200).send({ status: 401, message: "No account exists." });
