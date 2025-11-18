@@ -74,28 +74,26 @@ app.post(API_URL + '/auth/login', async (req, res) => {
         const { username, email, password } = req.body;
 
         if (!password) {
-            return res.status(200).send({ status: 200, message: "Invalid credentials." });
+            return res.status(200).send({ status: 401, message: "Invalid credentials." });
         }
 
         /**
          * Check if the user is found in the system
          */
-        const user = await User.findOne({ $or: [{ username: username }, { email: email }] });
+        const user = await User.findOne({ $or: [{ username: username }, { email: email }] }).lean();
 
         if (!user) {
-            return res.status(200).send({ status: 200, message: "Invalid credentials." });
+            return res.status(200).send({ status: 401, message: "No account exists." });
         }
 
         /**
          * Compare user password, given === saved
          */
 
-        console.log(user, user.password, password);
-
         const passwordMatches = await bcrypt.compare(password, user.password);
 
         if (!passwordMatches) {
-            return res.status(200).send({ status: 200, message: "Invalid credentials." });
+            return res.status(200).send({ status: 401, message: "Invalid credentials." });
         }
 
         /**
@@ -107,7 +105,7 @@ app.post(API_URL + '/auth/login', async (req, res) => {
             { expiresIn: '1h' }                        // Token expires in 1 hour
         );
 
-        return res.status(200).send({ token, user: { id: user._id, username: user.username }, status: 200, message: "Successfully logged-in." });
+        return res.status(200).send({ token: token, user: { id: user._id, username: user.username }, status: 200, message: "Successfully logged-in." });
 
     } catch (error) {
         if (DEBUG) {

@@ -17,6 +17,8 @@ function LoginPage() {
             username: string;
             email: string;
         };
+        status: Number,
+        message: string
     }
     // ---------------------------
 
@@ -31,11 +33,14 @@ function LoginPage() {
             return response.data;
         },
         onSuccess: (data) => {
-            console.log("Success!", data);
-            // Save the Token
-            localStorage.setItem('token', data.token);
-            // Redirect to Home
-            navigate('/');
+            console.log(data);
+
+            if (data.status === 200) {
+                // Save the Token
+                localStorage.setItem('token', data.token);
+                navigate('/');
+            }
+            throw new Error(data.message);
         },
         onError: (err) => {
             console.error("Error:", err);
@@ -55,7 +60,7 @@ function LoginPage() {
 
                 {loginMutation.isError && (
                     <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
-                        Login Failed. Check credentials.
+                        {loginMutation.error.message}
                     </Alert>
                 )}
 
