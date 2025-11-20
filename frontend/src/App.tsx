@@ -7,17 +7,17 @@ import HomePage from './pages/HomePage';
 import PublicOnlyRoute from './components/PublicOnlyRoute';
 import RegisterPage from './pages/RegisterPage';
 import { Container } from '@mui/material';
-
+import CreatePage from './pages/CreatePage';
 const App: React.FC = () => {
   return (<>
     <Container
-      maxWidth="lg"
+      maxWidth={false}
       component="main"
-      sx={{ display: 'flex', flexDirection: 'column', my: 16, gap: 4 }}
-    >
+      disableGutters>
       <Navbar />
       <Routes>
         <Route path='/' element={<HomePage />}></Route>
+        <Route path="/create" element={<CreatePage />} />
         <Route element={<PublicOnlyRoute />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

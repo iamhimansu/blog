@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 50" role="img" aria-label="Hylo Logo">
+  <title>Hylo</title>
+  <g fill="currentColor" stroke="none">
+    <g transform="translate(0, 5)">
+      <rect x="0" y="0" width="8" height="40" rx="4" />
+      <path d="M18 20 C 18 5, 42 5, 42 20 V 40" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+    </g>
+
+    <text x="58" y="40" font-family="'Inter', 'Roboto', 'Helvetica Neue', sans-serif" font-size="34" font-weight="800" letter-spacing="-1.5">hylo</text>
+  </g>
+</svg>
