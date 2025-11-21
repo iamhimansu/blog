@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Box, Button, Container, TextField, Typography, Alert } from '@mui/material';
+import { Box, Button, Container, TextField, Typography, Alert, Link } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
+import { Link as RouterLink } from "react-router-dom";
 
 function LoginPage() {
     const [userOremail, setUserOremail] = useState('');
@@ -81,6 +82,9 @@ function LoginPage() {
                     >
                         {loginMutation.isPending ? 'Signing in...' : 'Sign In'}
                     </Button>
+                    <Link component={RouterLink} to="/register" variant="body2">
+                        {"Create new account"}
+                    </Link>
                 </Box>
             </Box>
         </Container>

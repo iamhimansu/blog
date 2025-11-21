@@ -1,7 +1,8 @@
-import { Alert, Box, Button, Container, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Container, Link, TextField, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 const RegisterPage: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -24,7 +25,7 @@ const RegisterPage: React.FC = () => {
 
     const registerMutation = useMutation<RegisterResponse, Error, RegisterVariables>({
         mutationFn: async (userData) => {
-            const response = await axios.post('/auth/register', userData);
+            const response = await axios.post('http://localhost:5001/api/v1/auth/register', userData);
             return response.data;
         },
         onError: (error) => {
@@ -32,7 +33,7 @@ const RegisterPage: React.FC = () => {
         },
         onSuccess: (data) => {
             if (data.status === 200) {
-                navigate('/login');
+                setTimeout(() => navigate('/login'), 2000);
             }
             throw new Error(data.message);
         }
@@ -46,7 +47,7 @@ const RegisterPage: React.FC = () => {
     }
     const passwordMatch = (e: React.FormEvent) => {
         if (password.length === confirmPassword.length && password != confirmPassword) {
-
+            return password && confirmPassword;
         }
     }
 
@@ -91,6 +92,9 @@ const RegisterPage: React.FC = () => {
                     >
                         {registerMutation.isPending ? '...' : 'Register'}
                     </Button>
+                    <Link component={RouterLink} to="/login" variant="body2">
+                        {"Already have an account? Sign In"}
+                    </Link>
                 </Box>
             </Container>
         </>

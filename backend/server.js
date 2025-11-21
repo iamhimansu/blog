@@ -26,7 +26,16 @@ app.get(API_URL + '/welcome', (req, res) => {
 
 app.post(API_URL + '/auth/register', async (req, res) => {
 
-    const { username = undefined, email = undefined, password = undefined } = req.body;
+    const { username = undefined, email = undefined, password = undefined, confirmPassword = undefined } = req.body;
+
+    if (!password || !confirmPassword) {
+        return res.status(200).send({ "status": 400, "message": "Please provide a password." });
+    }
+
+    if (password != confirmPassword) {
+        return res.status(200).send({ "status": 400, "message": "Passwords do not match." });
+    }
+
     /**
      * Check if the user is already present
      */
@@ -38,11 +47,7 @@ app.post(API_URL + '/auth/register', async (req, res) => {
     });
 
     if (alreadyExists) {
-        return res.status(200).send({ "status": 200, "message": "User with username or email already exists." });
-    }
-
-    if (!password) {
-        return res.status(200).send({ "status": 200, "message": "Please provide a password." });
+        return res.status(200).send({ "status": 400, "message": "User with username or email already exists." });
     }
 
     /**
@@ -63,7 +68,7 @@ app.post(API_URL + '/auth/register', async (req, res) => {
         await newUser.save();
         return res.status(200).send({ status: 200, "message": "User registration successful!" });
     } catch (error) {
-        return res.status(500).send({ status: error.status, "message": "Something went wrong, please try again!" });
+        return res.status(500).send({ status: 500, "message": "Something went wrong, please try again!" });
     }
 
 });
