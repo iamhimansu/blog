@@ -24,7 +24,7 @@ app.get(API_URL + '/welcome', (req, res) => {
     res.status(200).send({ message: 'Hello, Welcome' });
 });
 
-app.post(API_URL + '/auth/registration', async (req, res) => {
+app.post(API_URL + '/auth/register', async (req, res) => {
 
     const { username = undefined, email = undefined, password = undefined } = req.body;
     /**

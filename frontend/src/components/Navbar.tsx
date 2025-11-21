@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { Button, Divider, IconButton, Stack, Typography } from '@mui/material';
+import { Button, Divider, IconButton, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { CreateTwoTone, HomeTwoTone, PersonAddTwoTone } from '@mui/icons-material';
 import { ReactComponent as Logo } from "../assets/Hylogo.svg";

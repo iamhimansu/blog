@@ -22,18 +22,20 @@ function LoginPage() {
     }
     // ---------------------------
 
-    interface LoginInput {
+    interface LoginVariables {
         userOremail: string;
         password: string;
     }
     // API Mutation
-    const loginMutation = useMutation<LoginResponse, Error, LoginInput>({
+    const loginMutation = useMutation<LoginResponse, Error, LoginVariables>({
         mutationFn: async (userData) => {
             const response = await api.post('/auth/login', { username: userData.userOremail, password: userData.password });
             return response.data;
         },
+        onError: (err) => {
+            console.error("Error:", err);
+        },
         onSuccess: (data) => {
-
             if (data.status === 200) {
                 // Save the Token
                 localStorage.setItem('token', data.token);
@@ -41,8 +43,9 @@ function LoginPage() {
             }
             throw new Error(data.message);
         },
-        onError: (err) => {
-            console.error("Error:", err);
+
+        onSettled: async (data, error, variables, onMutateResult, context) => {
+
         }
     });
 
@@ -58,7 +61,7 @@ function LoginPage() {
                 <Typography component="h1" variant="h5">Sign In</Typography>
 
                 {loginMutation.isError && (
-                    <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+                    <Alert severity="error" sx={{ mt: 2 }}>
                         {loginMutation.error.message}
                     </Alert>
                 )}
