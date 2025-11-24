@@ -4,6 +4,8 @@ import cors from "cors";
 import User from "./models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Post from "./models/Post.js";
+import mongoose from "mongoose";
 
 const PORT = process.env.PORT;
 const API_PATH = process.env.BASE_PATH;
@@ -123,12 +125,26 @@ app.post(API_URL + '/auth/login', async (req, res) => {
 
 });
 
-app.post(API_PATH + '/auth/create-post', async (req, res) => {
+app.post(API_URL + '/posts/create', async (req, res) => {
+
     const { title = undefined, content = undefined } = req.body;
     if (typeof title === "undefined" || typeof content === "undefined") {
         return res.send({ status: 400, message: "Title and content is required" });
     }
 
+    /**
+     * Add post to the db
+     */
+    const newPost = new Post({
+        title, content
+    });
+
+    try {
+        await newPost.save();
+        return res.status(200).send({ status: 200, "message": "New post added!" });
+    } catch (error) {
+        return res.status(500).send({ status: 500, "message": "Something went wrong, please try again!" });
+    }
 
 })
 
