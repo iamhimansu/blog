@@ -82,7 +82,7 @@ function LoginPage() {
                     >
                         {loginMutation.isPending ? 'Signing in...' : 'Sign In'}
                     </Button>
-                    <Link component={RouterLink} to="/register" variant="body2">
+                    Not registered yet? <Link component={RouterLink} to="/register" variant="body2">
                         {"Create new account"}
                     </Link>
                 </Box>

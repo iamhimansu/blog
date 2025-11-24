@@ -123,6 +123,15 @@ app.post(API_URL + '/auth/login', async (req, res) => {
 
 });
 
+app.post(API_PATH + '/auth/create-post', async (req, res) => {
+    const { title = undefined, content = undefined } = req.body;
+    if (typeof title === "undefined" || typeof content === "undefined") {
+        return res.send({ status: 400, message: "Title and content is required" });
+    }
+
+
+})
+
 // app.use(() => {
 //     connection.disconnect();
 //     console.log('Disconnected!');

@@ -3,6 +3,7 @@ import { Button, Divider, IconButton, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { CreateTwoTone, HomeTwoTone, PersonAddTwoTone } from '@mui/icons-material';
 import { ReactComponent as Logo } from "../assets/Hylogo.svg";
+import AccountMenu from './AccountMenu';
 export default function Navbar() {
 
     return (
@@ -16,6 +17,7 @@ export default function Navbar() {
                     <IconButton size='small' component={Link} to='/create' sx={{ color: '#000', fontSize: 14, fontWeight: 'bold' }}><CreateTwoTone /></IconButton>
                     <IconButton size='small' component={Link} to='/register' sx={{ color: '#000', fontSize: 14, fontWeight: 'bold' }}><PersonAddTwoTone /></IconButton>
                     <Button size='small' component={Link} to='/login' sx={{ color: '#000', fontSize: 14, fontWeight: 'bold' }}>Login</Button>
+                    <AccountMenu></AccountMenu>
                 </Stack>
             </Box >
             <Divider></Divider>
