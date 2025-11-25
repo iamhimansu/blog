@@ -141,7 +141,7 @@ app.post(API_URL + '/posts/create', async (req, res) => {
 
     try {
         await newPost.save();
-        return res.status(200).send({ status: 200, "message": "New post added!" });
+        return res.status(200).send({ status: 200, "message": "New post added!", data: newPost });
     } catch (error) {
         return res.status(500).send({ status: 500, "message": "Something went wrong, please try again!" });
     }
