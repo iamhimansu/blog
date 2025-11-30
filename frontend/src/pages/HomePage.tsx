@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Box, CircularProgress, Stack } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import api from '../api/api';
 import PostCard from '../components/PostCard';
 
@@ -11,11 +11,19 @@ interface PostData {
 }
 
 const HomePage: React.FC = () => {
-
+    const queryClient = useQueryClient();
     const postsQuery = useQuery<PostData[]>({
         queryKey: ['posts'],
-        queryFn: async () => { const response = await api.get('/posts/all'); return response.data.data }
+        queryFn: async () => { const response = await api.get('/posts/all'); return response.data.data },
+        staleTime: 0,
+        refetchOnWindowFocus: true,
+        refetchOnMount: true,
+        refetchOnReconnect: true,
     });
+    const handleRefreshPosts = () => {
+        queryClient.invalidateQueries({ queryKey: ['posts'] }); // Marks 'posts' query as stale
+        // postsQuery.refetch(); // This also works to refetch just this specific query
+    };
 
     if (postsQuery.isLoading) {
         return (
@@ -29,13 +37,12 @@ const HomePage: React.FC = () => {
         return (
             <Box sx={{ mt: 5 }}>
                 <Alert severity="error">
-                    Error loading posts. Please try again later.
+                    <button onClick={handleRefreshPosts}>Try Again</button>
                 </Alert>
             </Box>
         );
     }
     return (
-
         <Stack sx={{ padding: 2 }} direction="row" flexWrap="wrap" gap={3} justifyContent="flex-start">
             {/* 6. Map over the data array to create cards dynamically */}
             {postsQuery.data?.map((post) => (
