@@ -1,9 +1,9 @@
 import { Alert, Box, Button, Container, Link, TextField, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 const RegisterPage: React.FC = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -25,7 +25,7 @@ const RegisterPage: React.FC = () => {
 
     const registerMutation = useMutation<RegisterResponse, Error, RegisterVariables>({
         mutationFn: async (userData) => {
-            const response = await axios.post('http://localhost:5001/api/v1/auth/register', userData);
+            const response = await api.post('/auth/register', userData);
             return response.data;
         },
         onError: (error) => {

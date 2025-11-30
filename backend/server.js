@@ -148,6 +148,16 @@ app.post(API_URL + '/posts/create', async (req, res) => {
 
 })
 
+app.get(API_URL + '/posts/all', async (req, res) => {
+    try {
+        const posts = await Post.find({});
+        return res.status(200).send({ status: 200, "message": "Ok!", data: posts });
+    } catch (error) {
+        return res.status(500).send({ status: 500, "message": "Something went wrong, please try again!", data: error });
+    }
+
+})
+
 // app.use(() => {
 //     connection.disconnect();
 //     console.log('Disconnected!');

@@ -2,9 +2,9 @@ import styled from "@emotion/styled";
 import { CloudUploadTwoTone } from "@mui/icons-material";
 import { Alert, Box, Button, Container, TextField } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import React, { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 
 const CreatePage: React.FC = () => {
     const navigate = useNavigate();
@@ -36,7 +36,7 @@ const CreatePage: React.FC = () => {
 
     const createPageMutation = useMutation<CreateContentResponse, Error, CreateContentVariables>({
         mutationFn: async (contentData) => {
-            const response = await axios.post('http://localhost:5001/api/v1/posts/create', contentData);
+            const response = await api.post('/posts/create', contentData);
             return response.data;
         },
         onError: (error) => {
