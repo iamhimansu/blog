@@ -11,6 +11,7 @@ const CreatePage: React.FC = () => {
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [headerImage, setHeaderImage] = useState<File | null>(null);
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -29,14 +30,9 @@ const CreatePage: React.FC = () => {
         status: Number
     }
 
-    interface CreateContentVariables {
-        title: string,
-        content: string
-    }
-
-    const createPageMutation = useMutation<CreateContentResponse, Error, CreateContentVariables>({
-        mutationFn: async (contentData) => {
-            const response = await api.post('/posts/create', contentData);
+    const createPageMutation = useMutation<CreateContentResponse, Error, FormData>({
+        mutationFn: async (formData: FormData) => {
+            const response = await api.post('/posts/create', formData);
             return response.data;
         },
         onError: (error) => {
@@ -54,9 +50,14 @@ const CreatePage: React.FC = () => {
         e.preventDefault();
         const contentData = (document.getElementById('content') as HTMLTextAreaElement)?.value || '';
         setContent(contentData);
-        createPageMutation.mutate({
-            title, content
-        });
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('content', contentData);
+
+        if (headerImage) {
+            formData.append('headerImage', headerImage);
+        }
+        createPageMutation.mutate(formData);
     }
 
     return (
@@ -77,14 +78,14 @@ const CreatePage: React.FC = () => {
                     {createPageMutation.data.message}
                 </Alert>
             )}
-            <Box component="form" onSubmit={handleSubmit}>
+            <Box component="form" encType="multipart/form-data" onSubmit={handleSubmit}>
                 <Box sx={{ marginBottom: 4 }}>
                     <TextField
                         required
                         id="outlined-required"
                         label="Title"
                         fullWidth
-                        onChange={(e) => setTitle(e.target.value)}
+                        onChange={(e) => setTitle(e.target.value.trim())}
                     />
                 </Box>
                 <Box sx={{ marginBottom: 4 }}>
@@ -92,12 +93,14 @@ const CreatePage: React.FC = () => {
                         component="label"
                         variant="outlined"
                         tabIndex={-1}
-                        fullWidth={true}
+                        fullWidth
                         startIcon={<CloudUploadTwoTone />}
                     >
                         Upload Header Image
                         <VisuallyHiddenInput
                             type="file"
+                            accept="image/*" // Only accept image files
+                            onChange={(e) => setHeaderImage(e.target.files ? e.target.files[0] : null)}
                         />
                     </Button>
                 </Box>

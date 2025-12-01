@@ -8,7 +8,11 @@ const PostsSchema = new mongoose.Schema({
     content: {
         type: JSON,
         required: true
-    }
+    },
+    headerImageUrl: {
+        type: String,
+        required: false
+    },
 }, { timestamps: true });
 
 const Post = mongoose.model('Posts', PostsSchema);
