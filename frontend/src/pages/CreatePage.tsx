@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { CloudUploadTwoTone } from "@mui/icons-material";
 import { Alert, Box, Button, Container, TextField } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 
@@ -48,11 +48,9 @@ const CreatePage: React.FC = () => {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        const contentData = (document.getElementById('content') as HTMLTextAreaElement)?.value || '';
-        setContent(contentData);
         const formData = new FormData();
         formData.append('title', title);
-        formData.append('content', contentData);
+        formData.append('content', content);
 
         if (headerImage) {
             formData.append('headerImage', headerImage);
@@ -113,6 +111,7 @@ const CreatePage: React.FC = () => {
                         fullWidth
                         rows={10}
                         sx={{ minHeight: '200px' }}
+                        onChange={(e) => { setContent(e.target.value) }}
                     />
                 </Box>
                 <Box sx={{ textAlign: 'right' }}>
