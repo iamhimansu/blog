@@ -125,7 +125,7 @@ app.post(API_URL + '/auth/login', async (req, res) => {
 
 });
 
-app.post(API_URL + '/posts/create', Uploader.single('headerImage'), async (req, res) => {
+app.post(API_URL + '/posts/create', Uploader.single("headerImage"), async (req, res) => {
 
     const { title = null, content = null } = req.body;
 

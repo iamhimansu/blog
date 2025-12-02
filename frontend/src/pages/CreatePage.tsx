@@ -11,7 +11,7 @@ const CreatePage: React.FC = () => {
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [headerImage, setHeaderImage] = useState<File | null>(null);
+    const fileRef = useRef<HTMLInputElement>(null);
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -52,8 +52,11 @@ const CreatePage: React.FC = () => {
         formData.append('title', title);
         formData.append('content', content);
 
-        if (headerImage) {
-            formData.append('headerImage', headerImage);
+        // Access the selected file
+        const file = fileRef.current?.files?.[0];
+
+        if (file) {
+            formData.append('headerImage', file);
         }
         createPageMutation.mutate(formData);
     }
@@ -98,10 +101,12 @@ const CreatePage: React.FC = () => {
                         <VisuallyHiddenInput
                             type="file"
                             accept="image/*" // Only accept image files
-                            onChange={(e) => setHeaderImage(e.target.files ? e.target.files[0] : null)}
+                            ref={fileRef}
+                            name="headerImage"
                         />
                     </Button>
                 </Box>
+
                 <Box sx={{ marginBottom: 4 }}>
                     <TextField
                         id="content"

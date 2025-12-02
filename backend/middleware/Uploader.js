@@ -22,19 +22,19 @@ const storage = multer.diskStorage({
 // 'headerImage' is the name of the input field in your HTML form
 const Uploader = multer({
     storage: storage,
-    // limits: { fileSize: 1024 * 1024 * 5 }, // Limit file size to 5MB
-    // fileFilter: (req, file, cb) => {
+    limits: { fileSize: 1024 * 1024 * 5 }, // Limit file size to 5MB
+    fileFilter: (req, file, cb) => {
 
-    //     // Only allow image files
-    //     const filetypes = /jpeg|jpg|png|gif/;
-    //     const mimetype = filetypes.test(file.mimetype);
-    //     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        // Only allow image files
+        const filetypes = /jpeg|jpg|png|gif/;
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 
-    //     if (mimetype && extname) {
-    //         return cb(null, true);
-    //     }
-    //     cb(new Error('Only images (jpeg, jpg, png, gif) are allowed!'));
-    // },
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+        cb(new Error('Only images (jpeg, jpg, png, gif) are allowed!'));
+    },
 
 });
 
