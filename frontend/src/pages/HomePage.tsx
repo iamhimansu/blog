@@ -1,8 +1,9 @@
 import React from 'react';
-import { Alert, Box, CircularProgress, Stack } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, Container, Divider, Stack, Tab, Tabs } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import api from '../api/api';
 import PostCard from '../components/PostCard';
+import { CloseTwoTone, DeleteForeverTwoTone, Padding } from '@mui/icons-material';
 
 interface PostData {
     id: string;
@@ -43,20 +44,37 @@ const HomePage: React.FC = () => {
         );
     }
     return (
-        <Stack sx={{ padding: 2 }} direction="row" flexWrap="wrap" gap={3} justifyContent="flex-start">
-            {/* 6. Map over the data array to create cards dynamically */}
-            {postsQuery.data?.map((post) => (
-                <PostCard
-                    // IMPORTANT: Every item in a map needs a unique 'key'
-                    key={post.id}
-                    title={post.title}
-                    // Truncate long content for the preview card
-                    content={post.content.substring(0, 120) + (post.content.length > 120 ? '...' : '')}
-                    // Use a placeholder image since the backend doesn't provide one yet
-                    headerImage={`https://dummyimage.com/600x400/000/fff`}
-                />
-            ))}
-        </Stack>
+        <Container maxWidth={false}>
+            <Tabs
+
+                variant="scrollable"
+                scrollButtons="auto"
+                sx={{ margin: 0 }}
+            >
+                <Tab label={
+                    <Button size="small" endIcon={<CloseTwoTone />}>
+                        Action
+                    </Button>
+                } />
+
+            </Tabs>
+            <Divider></Divider>
+
+            <Stack sx={{ padding: 2 }} direction="row" flexWrap="wrap" gap={3} justifyContent="flex-start">
+                {/* 6. Map over the data array to create cards dynamically */}
+                {postsQuery.data?.map((post) => (
+                    <PostCard
+                        // IMPORTANT: Every item in a map needs a unique 'key'
+                        key={post.id}
+                        title={post.title}
+                        // Truncate long content for the preview card
+                        content={post.content.substring(0, 120) + (post.content.length > 120 ? '...' : '')}
+                        // Use a placeholder image since the backend doesn't provide one yet
+                        headerImage={`https://dummyimage.com/600x400/000/fff`}
+                    />
+                ))}
+            </Stack>
+        </Container>
     );
 }
 

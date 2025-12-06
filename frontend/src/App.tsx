@@ -16,7 +16,7 @@ const App: React.FC = () => {
       disableGutters>
       <Navbar />
       <Routes>
-        <Route path='/' element={<HomePage />}></Route>
+        <Route index path='/' element={<HomePage />}></Route>
         <Route path="/create" element={<CreatePage />} />
         <Route element={<PublicOnlyRoute />}>
           <Route path="/login" element={<LoginPage />} />
