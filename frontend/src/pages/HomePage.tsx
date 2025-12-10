@@ -19,6 +19,7 @@ interface TabItems {
 const HomePage: React.FC = () => {
 
     const [tabs, setTabs] = useState<TabItems[]>([]);
+    const [currentTab, setCurrentTab] = useState('');
 
     const queryClient = useQueryClient();
     const postsQuery = useQuery<PostData[]>({
@@ -63,6 +64,8 @@ const HomePage: React.FC = () => {
             return prevTabs;
         });
 
+        setCurrentTab(id);
+
     }
 
     const handleTabClose = (e: React.FormEvent, id: string) => {
@@ -73,18 +76,21 @@ const HomePage: React.FC = () => {
     }
 
     return (
-        <Container maxWidth={false}>
+        <Container maxWidth={false} disableGutters>
             {tabs.length > 0 && (
                 <>
                     <Tabs
+                        value={currentTab}
                         variant="scrollable"
                         scrollButtons="auto"
-                        indicatorColor="secondary"
-                        sx={{ margin: 0 }}
+                        sx={{
+                            margin: 0,
+                        }}
                     >
                         {tabs.map((tab, index) => (
                             <Tab
                                 key={tab.id}
+                                value={tab.id}
                                 label={
                                     <Box sx={{ display: 'flex', alignItems: 'center', fontWeight: 'bolder' }}>
                                         {tab.label}
@@ -93,7 +99,7 @@ const HomePage: React.FC = () => {
                                         </IconButton>
                                     </Box>
                                 }
-                                id={`simple-tab-${index}`}
+                                onClick={e => setCurrentTab(tab.id)}
                                 aria-controls={`simple-tabpanel-${index}`}
                             />
                         ))
