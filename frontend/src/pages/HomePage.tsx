@@ -1,9 +1,9 @@
-import React from 'react';
-import { Alert, Box, Button, CircularProgress, Container, Divider, Stack, Tab, Tabs } from '@mui/material';
+import React, { useState } from 'react';
+import { Alert, Box, CircularProgress, Container, Divider, IconButton, Stack, Tab, Tabs } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import api from '../api/api';
 import PostCard from '../components/PostCard';
-import { CloseTwoTone, DeleteForeverTwoTone, Padding } from '@mui/icons-material';
+import { CloseTwoTone } from '@mui/icons-material';
 
 interface PostData {
     id: string;
@@ -11,7 +11,15 @@ interface PostData {
     content: string;
 }
 
+interface TabItems {
+    id: string;
+    label: string;
+}
+
 const HomePage: React.FC = () => {
+
+    const [tabs, setTabs] = useState<TabItems[]>([]);
+
     const queryClient = useQueryClient();
     const postsQuery = useQuery<PostData[]>({
         queryKey: ['posts'],
@@ -43,22 +51,58 @@ const HomePage: React.FC = () => {
             </Box>
         );
     }
+
+    const handleTabs = (id: string, value: string) => {
+        setTabs((prevTabs) => {
+            const exists = tabs.some((tab) => tab.id === id);
+
+            if (!exists) {
+                // 2. If it doesn't exist, add it to the array
+                setTabs((prevTabs) => [...tabs, { id, label: value }]);
+            }
+            return prevTabs;
+        });
+
+    }
+
+    const handleTabClose = (e: React.FormEvent, id: string) => {
+        setTabs((prevTabs) => {
+            const newTabs = prevTabs.filter((tab) => tab.id !== id);
+            return newTabs;
+        });
+    }
+
     return (
         <Container maxWidth={false}>
-            <Tabs
+            {tabs.length > 0 && (
+                <>
+                    <Tabs
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        indicatorColor="secondary"
+                        sx={{ margin: 0 }}
+                    >
+                        {tabs.map((tab, index) => (
+                            <Tab
+                                key={tab.id}
+                                label={
+                                    <Box sx={{ display: 'flex', alignItems: 'center', fontWeight: 'bolder' }}>
+                                        {tab.label}
+                                        <IconButton size="small" component="span" sx={{ ml: 1 }} onClick={(e) => handleTabClose(e, tab.id)}>
+                                            <CloseTwoTone fontSize="small" />
+                                        </IconButton>
+                                    </Box>
+                                }
+                                id={`simple-tab-${index}`}
+                                aria-controls={`simple-tabpanel-${index}`}
+                            />
+                        ))
+                        }
+                    </Tabs>
 
-                variant="scrollable"
-                scrollButtons="auto"
-                sx={{ margin: 0 }}
-            >
-                <Tab label={
-                    <Button size="small" endIcon={<CloseTwoTone />}>
-                        Action
-                    </Button>
-                } />
-
-            </Tabs>
-            <Divider></Divider>
+                    <Divider></Divider>
+                </>
+            )}
 
             <Stack sx={{ padding: 2 }} direction="row" flexWrap="wrap" gap={3} justifyContent="flex-start">
                 {/* 6. Map over the data array to create cards dynamically */}
@@ -66,11 +110,14 @@ const HomePage: React.FC = () => {
                     <PostCard
                         // IMPORTANT: Every item in a map needs a unique 'key'
                         key={post.id}
+                        id={post.id}
                         title={post.title}
                         // Truncate long content for the preview card
                         content={post.content.substring(0, 120) + (post.content.length > 120 ? '...' : '')}
                         // Use a placeholder image since the backend doesn't provide one yet
                         headerImage={`https://dummyimage.com/600x400/000/fff`}
+
+                        handleTabs={handleTabs}
                     />
                 ))}
             </Stack>
