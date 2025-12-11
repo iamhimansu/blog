@@ -14,7 +14,6 @@ const PostCard: React.FC<PostCardProps> = ({ id, headerImage, title, content, ha
                 component="img"
                 height="140"
                 image={headerImage}
-                alt="green iguana"
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
@@ -27,14 +26,14 @@ const PostCard: React.FC<PostCardProps> = ({ id, headerImage, title, content, ha
         </CardActionArea>
         <CardActions>
             <Button size="small" color="primary" onClick={() => handleTabs(id, title)} sx={{
-                backgroundColor: '#E47C6B', // Coral color from the image
+                backgroundColor: '#E47C6B',
                 fontWeight: 'bold',
-                color: '#333333', // White text
+                color: '#333333',
                 '&:hover': {
-                    backgroundColor: '#D36E5E', // Slightly darker shade for hover
+                    backgroundColor: '#D36E5E',
                 },
-                textTransform: 'none', // Prevents automatic uppercase
-                borderRadius: '900px', // Rounded corners
+                textTransform: 'none',
+                borderRadius: '900px',
             }}
             >
                 Read

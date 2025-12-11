@@ -85,7 +85,26 @@ const HomePage: React.FC = () => {
                         scrollButtons="auto"
                         sx={{
                             margin: 0,
-                            backgroundColor: '#FFFFFF'
+                            backgroundColor: '#FFFFFF',
+                            '& .MuiTabs-indicator': {
+                                backgroundColor: '#E47C6B', // Set indicator color to coral
+                                height: '3px', // Optional: Make it slightly thicker
+                            },
+                            '& .MuiTab-root': {
+                                textTransform: 'none', // Keep text as written (not uppercase)
+                                fontWeight: 'bold',
+                                color: '#000000',
+                                opacity: 0.8, // Slightly transparent for unselected tabs
+                                fontSize: '16px',
+                                '&.Mui-selected': {
+                                    color: '#E47C6B', // Highlight selected tab with coral
+                                    opacity: 1,
+                                },
+                                '&:hover': {
+                                    color: '#E47C6B', // Highlight on hover
+                                    opacity: 1,
+                                },
+                            },
                         }}
                     >
                         {tabs.map((tab, index) => (
