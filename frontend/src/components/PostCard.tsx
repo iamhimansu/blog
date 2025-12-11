@@ -26,7 +26,17 @@ const PostCard: React.FC<PostCardProps> = ({ id, headerImage, title, content, ha
             </CardContent>
         </CardActionArea>
         <CardActions>
-            <Button size="small" color="primary" onClick={() => handleTabs(id, title)}>
+            <Button size="small" color="primary" onClick={() => handleTabs(id, title)} sx={{
+                backgroundColor: '#E47C6B', // Coral color from the image
+                fontWeight: 'bold',
+                color: '#333333', // White text
+                '&:hover': {
+                    backgroundColor: '#D36E5E', // Slightly darker shade for hover
+                },
+                textTransform: 'none', // Prevents automatic uppercase
+                borderRadius: '900px', // Rounded corners
+            }}
+            >
                 Read
             </Button>
         </CardActions>

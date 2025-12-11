@@ -76,7 +76,7 @@ const HomePage: React.FC = () => {
     }
 
     return (
-        <Container maxWidth={false} disableGutters>
+        <Container maxWidth={false} disableGutters sx={{ backgroundColor: '#F2F2F2' }}>
             {tabs.length > 0 && (
                 <>
                     <Tabs
@@ -85,6 +85,7 @@ const HomePage: React.FC = () => {
                         scrollButtons="auto"
                         sx={{
                             margin: 0,
+                            backgroundColor: '#FFFFFF'
                         }}
                     >
                         {tabs.map((tab, index) => (
